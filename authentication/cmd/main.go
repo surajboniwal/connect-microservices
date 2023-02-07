@@ -5,7 +5,9 @@ import (
 	"log"
 	"net"
 
+	"github.com/surajboniwal/connect/authentication/pkg/auth"
 	"github.com/surajboniwal/connect/authentication/pkg/config"
+	"github.com/surajboniwal/connect/authentication/pkg/pb"
 	"google.golang.org/grpc"
 )
 
@@ -19,8 +21,11 @@ func main() {
 
 	server := grpc.NewServer()
 
+	authServer := auth.Server{}
+
+	pb.RegisterAuthServiceServer(server, &authServer)
+
 	if err := server.Serve(lis); err != nil {
 		log.Fatalf("Failed to start server %s", err)
 	}
-
 }
