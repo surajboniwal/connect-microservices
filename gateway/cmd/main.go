@@ -2,10 +2,10 @@ package main
 
 import (
 	"log"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/surajboniwal/connect/gateway/pkg/config"
+	"github.com/surajboniwal/connect/gateway/pkg/router"
 )
 
 type App struct {
@@ -15,13 +15,7 @@ type App struct {
 
 func main() {
 	config := config.LoadConfig("dev")
-	router := gin.Default()
-
-	router.GET("/", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusAccepted, gin.H{
-			"status": true,
-		})
-	})
+	router := router.NewRouter()
 
 	app := App{
 		config: &config,
