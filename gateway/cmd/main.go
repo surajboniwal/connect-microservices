@@ -5,7 +5,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/surajboniwal/connect/gateway/pkg/config"
+	"github.com/surajboniwal/connect/gateway/pkg/pb"
 	"github.com/surajboniwal/connect/gateway/pkg/router"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type App struct {
@@ -22,7 +25,19 @@ func main() {
 		router: router,
 	}
 
+	app.connectToAuthService()
+
 	app.StartServer()
+}
+
+func (app *App) connectToAuthService() {
+	conn, err := grpc.Dial(app.config.AuthServiceAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+
+	if err != nil {
+		log.Fatalf("Unable to connect to auth service %v", err)
+	}
+
+	pb.NewAuthServiceClient(conn)
 }
 
 func (app *App) StartServer() {

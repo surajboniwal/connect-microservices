@@ -7,7 +7,8 @@ import (
 )
 
 type Config struct {
-	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
+	ServerAddress      string `mapstructure:"SERVER_ADDRESS"`
+	AuthServiceAddress string `mapstructure:"AUTHENTICATION_SERVICE_ADDRESS"`
 }
 
 func LoadConfig(name string) Config {
