@@ -4,9 +4,10 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/surajboniwal/connect/gateway/pkg/config"
-	"github.com/surajboniwal/connect/gateway/pkg/pb"
-	"github.com/surajboniwal/connect/gateway/pkg/router"
+	"github.com/surajboniwal/connect/gateway/internal/auth"
+	"github.com/surajboniwal/connect/gateway/internal/config"
+	"github.com/surajboniwal/connect/gateway/internal/pb"
+	"github.com/surajboniwal/connect/gateway/internal/router"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -18,26 +19,33 @@ type App struct {
 
 func main() {
 	config := config.LoadConfig("dev")
-	router := router.NewRouter()
+
+	authClient := connectToAuthService(&config)
+
+	handlers := router.Handlers{
+		AuthHandler: auth.NewAuthHandler(authClient),
+	}
+
+	router := router.NewRouter(&handlers)
 
 	app := App{
 		config: &config,
 		router: router,
 	}
 
-	app.connectToAuthService()
-
 	app.StartServer()
 }
 
-func (app *App) connectToAuthService() {
-	conn, err := grpc.Dial(app.config.AuthServiceAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+func connectToAuthService(config *config.Config) pb.AuthServiceClient {
+	conn, err := grpc.Dial(config.AuthServiceAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
 		log.Fatalf("Unable to connect to auth service %v", err)
 	}
 
-	pb.NewAuthServiceClient(conn)
+	client := pb.NewAuthServiceClient(conn)
+
+	return client
 }
 
 func (app *App) StartServer() {
