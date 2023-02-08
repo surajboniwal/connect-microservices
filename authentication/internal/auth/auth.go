@@ -3,7 +3,7 @@ package auth
 import (
 	"context"
 
-	"github.com/surajboniwal/connect/authentication/pkg/pb"
+	"github.com/surajboniwal/connect/authentication/internal/pb"
 )
 
 type Server struct {
@@ -15,5 +15,5 @@ func (s *Server) Register(ctx context.Context, request *pb.RegisterRequest) (*pb
 }
 
 func (s *Server) Login(ctx context.Context, request *pb.LoginRequest) (*pb.LoginResponse, error) {
-	return &pb.LoginResponse{Status: true, Message: "User logged"}, nil
+	return &pb.LoginResponse{Status: true, Message: "User logged in"}, nil
 }

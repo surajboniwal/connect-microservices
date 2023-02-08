@@ -12,7 +12,7 @@ type Handlers struct {
 func NewRouter(handlers *Handlers) *gin.Engine {
 	router := gin.Default()
 
-	auth.AuthRouter(router.Group("/auth"), handlers.AuthHandler)
+	auth.Router(router.Group("/auth"), handlers.AuthHandler)
 
 	return router
 }

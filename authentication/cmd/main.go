@@ -5,9 +5,9 @@ import (
 	"log"
 	"net"
 
-	"github.com/surajboniwal/connect/authentication/pkg/auth"
-	"github.com/surajboniwal/connect/authentication/pkg/config"
-	"github.com/surajboniwal/connect/authentication/pkg/pb"
+	"github.com/surajboniwal/connect/authentication/internal/auth"
+	"github.com/surajboniwal/connect/authentication/internal/config"
+	"github.com/surajboniwal/connect/authentication/internal/pb"
 	"google.golang.org/grpc"
 )
 
