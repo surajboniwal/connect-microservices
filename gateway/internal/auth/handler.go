@@ -1,11 +1,11 @@
 package auth
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/surajboniwal/connect/gateway/internal/pb"
-	"golang.org/x/net/context"
 )
 
 type AuthHandler struct {
@@ -19,18 +19,26 @@ func NewAuthHandler(conn pb.AuthServiceClient) *AuthHandler {
 }
 
 func (h *AuthHandler) loginHandler(ctx *gin.Context) {
-	loginResponse, err := h.conn.Login(context.Background(), &pb.LoginRequest{
-		Email:    "surajboniwal18@gmail.com",
-		Password: "suraj1335",
+
+}
+
+func (h *AuthHandler) registerHandler(ctx *gin.Context) {
+	var body RegisterParams
+
+	if err := ctx.ShouldBindJSON(&body); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	response, err := h.conn.Register(context.Background(), &pb.RegisterRequest{
+		Email:    body.Email,
+		Password: body.Password,
 	})
 
 	if err != nil {
-		ctx.AbortWithError(http.StatusInternalServerError, err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
-	ctx.JSON(http.StatusAccepted, gin.H{
-		"hello": loginResponse.Message,
-	})
+	ctx.JSON(http.StatusOK, gin.H{"status": response.Message})
 }
-
-func (h *AuthHandler) registerHandler(ctx *gin.Context) {}
