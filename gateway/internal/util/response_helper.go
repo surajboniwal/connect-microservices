@@ -7,8 +7,8 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func ParseError(err error) map[string]interface{} {
-	errResponse := map[string]interface{}{}
+func ParseError(err error) map[string]any {
+	errResponse := map[string]any{}
 	for _, e := range err.(validator.ValidationErrors) {
 		errResponse[strings.ToLower(e.Field())] = errorString(e)
 	}
