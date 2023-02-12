@@ -27,8 +27,8 @@ func (h *AuthHandler) registerHandler(ctx *gin.Context) {
 	var body RegisterParams
 
 	if err := ctx.ShouldBind(&body); err != nil {
-		eResponse := util.ParseError(err)
-		ctx.JSON(http.StatusBadRequest, gin.H{"status": false, "error": eResponse})
+		e := util.ParseError(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": false, "error": e})
 		return
 	}
 
@@ -38,7 +38,7 @@ func (h *AuthHandler) registerHandler(ctx *gin.Context) {
 	})
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"status": false, "error": "Something went wrong!"})
 		return
 	}
 
