@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/surajboniwal/connect/gateway/internal/pb"
+	"github.com/surajboniwal/connect/gateway/internal/util"
 )
 
 type AuthHandler struct {
@@ -25,8 +26,9 @@ func (h *AuthHandler) loginHandler(ctx *gin.Context) {
 func (h *AuthHandler) registerHandler(ctx *gin.Context) {
 	var body RegisterParams
 
-	if err := ctx.ShouldBindJSON(&body); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := ctx.ShouldBind(&body); err != nil {
+		eResponse := util.ParseError(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": false, "error": eResponse})
 		return
 	}
 
@@ -40,5 +42,5 @@ func (h *AuthHandler) registerHandler(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"status": response.Message})
+	ctx.JSON(http.StatusOK, gin.H{"status": true, "data": response})
 }
