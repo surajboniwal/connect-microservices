@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/surajboniwal/connect/gateway/internal/auth"
@@ -18,9 +19,16 @@ type App struct {
 }
 
 func main() {
-	config := config.LoadConfig("dev")
+	c, err := config.LoadConfig("dev")
 
-	authClient := connectToAuthService(&config)
+	if err != nil {
+		c = config.Config{
+			ServerAddress:      os.Getenv("SERVER_ADDRESS"),
+			AuthServiceAddress: os.Getenv("AUTH_SERVICE_ADDRESS"),
+		}
+	}
+
+	authClient := connectToAuthService(&c)
 
 	handlers := router.Handlers{
 		AuthHandler: auth.NewAuthHandler(authClient),
@@ -29,7 +37,7 @@ func main() {
 	router := router.NewRouter(&handlers)
 
 	app := App{
-		config: &config,
+		config: &c,
 		router: router,
 	}
 
