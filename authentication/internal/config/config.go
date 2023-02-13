@@ -1,8 +1,6 @@
 package config
 
 import (
-	"log"
-
 	"github.com/spf13/viper"
 )
 
@@ -10,7 +8,7 @@ type Config struct {
 	Port string `mapstructure:"PORT"`
 }
 
-func LoadConfig(name string) Config {
+func LoadConfig(name string) (Config, error) {
 	viper.AddConfigPath("./internal/config/")
 	viper.SetConfigName(name)
 	viper.SetConfigType("env")
@@ -18,17 +16,18 @@ func LoadConfig(name string) Config {
 	viper.AutomaticEnv()
 
 	err := viper.ReadInConfig()
+
 	if err != nil {
-		log.Panic("Unable to load config", err)
+		return Config{}, err
 	}
 
 	config := Config{}
 	err = viper.Unmarshal(&config)
 
 	if err != nil {
-		log.Panic("Unable to parse config", err)
+		return Config{}, err
 	}
 
-	return config
+	return config, nil
 
 }

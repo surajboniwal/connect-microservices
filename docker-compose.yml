@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  gateway:
+    build: ./gateway
+    ports: 
+      - "3000:80"
+    networks:
+      - connect
+    environment:
+      - SERVER_ADDRESS=0.0.0.0:80
+      - AUTH_SERVICE_ADDRESS=authentication:80
+      - GIN_MODE=release
+    depends_on:
+      - authentication
+
+  authentication:
+    build: ./authentication
+    networks:
+      - connect
+    environment:
+      - PORT=80
+        
+
+networks:
+  connect:
+    name: "connect"

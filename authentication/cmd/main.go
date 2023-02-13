@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 
 	"github.com/surajboniwal/connect/authentication/internal/auth"
 	"github.com/surajboniwal/connect/authentication/internal/config"
@@ -12,11 +13,18 @@ import (
 )
 
 func main() {
-	config := config.LoadConfig("dev")
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", config.Port))
+	c, err := config.LoadConfig("dev")
 
 	if err != nil {
-		log.Fatalf("Unable to listen to port %s", config.Port)
+		c = config.Config{
+			Port: os.Getenv("PORT"),
+		}
+	}
+
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", c.Port))
+
+	if err != nil {
+		log.Fatalf("Unable to listen to port %s", c.Port)
 	}
 
 	server := grpc.NewServer()
