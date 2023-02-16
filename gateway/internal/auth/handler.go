@@ -42,5 +42,5 @@ func (h *AuthHandler) registerHandler(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"status": true, "data": response})
+	ctx.JSON(http.StatusOK, gin.H{"status": true, "data": response.Status})
 }

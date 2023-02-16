@@ -12,7 +12,16 @@ services:
       - AUTH_SERVICE_ADDRESS=authentication:80
       - GIN_MODE=release
     depends_on:
+      - gateway-db
       - authentication
+
+  gateway-db:
+    image: postgres:alpine3.17
+    networks:
+      - connect
+    environment:
+      - POSTGRES_USER=surajboniwal
+      - POSTGRES_PASSWORD=suraj1335
 
   authentication:
     build: ./authentication
@@ -20,7 +29,6 @@ services:
       - connect
     environment:
       - PORT=80
-        
 
 networks:
   connect:

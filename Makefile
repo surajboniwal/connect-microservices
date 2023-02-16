@@ -15,7 +15,7 @@ build: build_gateway build_authentication
 remove: remove_gateway remove_authentication
 
 up: remove build
-	docker-compose up --detach
+	docker-compose up --detach --build
 
 down: remove
-	docker-compose down
+	docker-compose down --rmi local
