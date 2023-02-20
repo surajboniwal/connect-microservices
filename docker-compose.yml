@@ -12,11 +12,13 @@ services:
       - AUTH_SERVICE_ADDRESS=authentication:80
       - GIN_MODE=release
     depends_on:
-      - gateway-db
+      - authentication-db
       - authentication
 
-  gateway-db:
+  authentication-db:
     image: postgres:alpine3.17
+    ports:
+      - "3001:5432"
     networks:
       - connect
     environment:
