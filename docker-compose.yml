@@ -15,6 +15,13 @@ services:
       - authentication-db
       - authentication
 
+  authentication:
+    build: ./authentication
+    networks:
+      - connect
+    environment:
+      - PORT=80
+
   authentication-db:
     image: postgres:alpine3.17
     ports:
@@ -24,13 +31,9 @@ services:
     environment:
       - POSTGRES_USER=surajboniwal
       - POSTGRES_PASSWORD=suraj1335
-
-  authentication:
-    build: ./authentication
-    networks:
-      - connect
-    environment:
-      - PORT=80
+      - POSTGRES_DB=socialmedia
+    volumes:
+      - ./volumes/authentication-db:/var/lib/postgresql/data
 
 networks:
   connect:

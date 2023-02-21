@@ -6,10 +6,7 @@ build:
 
 remove:
 	rm -rf authentication
-
-createdb:
-	docker exec -it connect-authentication-db-1 createdb --username=surajboniwal --owner=surajboniwal socialmedia
-
+	
 dropdb:
 	docker exec -it connect-authentication-db-1 dropdb socialmedia
 

@@ -19,3 +19,6 @@ up: remove build
 
 down: remove
 	docker-compose down --rmi local
+
+start:
+	./start.sh
