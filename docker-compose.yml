@@ -12,7 +12,6 @@ services:
       - AUTH_SERVICE_ADDRESS=authentication:80
       - GIN_MODE=release
     depends_on:
-      - authentication-db
       - authentication
 
   authentication:
@@ -21,6 +20,8 @@ services:
       - connect
     environment:
       - PORT=80
+    depends_on:
+      - authentication-db
 
   authentication-db:
     image: postgres:alpine3.17
